@@ -1,32 +1,36 @@
-const http = require('http');
-const soap = require('soap');
-const fs = require('fs');
-const path = require('path');
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
+const soap = require("soap");
+const http = require("http");
+
+const app = express();
+
+const wsdlPath = path.join(__dirname, "service.wsdl");
+const wsdlXml = fs.readFileSync(wsdlPath, "utf8");
 
 const service = {
   MyService: {
     MyServicePort: {
       MyFunction(args) {
-        console.log("== دریافت پارامترها ==");
-        console.log("param1:", args.param1);
-        console.log("param2:", args.param2);
-        console.log("param3:", args.param3);
-        console.log("param4:", args.param4);
+        console.log("Received:", args);
         return { result: "OK" };
       }
     }
   }
 };
 
-const wsdlPath = path.join(__dirname, 'service.wsdl');
-const wsdlXml = fs.readFileSync(wsdlPath, 'utf8');
+app.get("/", (req, res) => res.send("SOAP Service is running"));
 
-const server = http.createServer(function (req, res) {
-  res.statusCode = 404;
-  res.end("404: Not Found");
+app.get("/wsdl", (req, res) => {
+  res.set("Content-Type", "text/xml");
+  res.send(wsdlXml);
 });
 
-server.listen(8000, function () {
-  console.log("SOAP Server running at http://localhost:8000/wsdl");
-  soap.listen(server, '/wsdl', service, wsdlXml);
+const server = http.createServer(app);
+const port = process.env.PORT || 3000;
+
+server.listen(port, () => {
+  console.log("Server running on port", port);
+  soap.listen(server, "/wsdl", service, wsdlXml);
 });
