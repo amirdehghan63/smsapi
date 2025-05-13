@@ -1,0 +1,12 @@
+{
+  "name": "soap-api",
+  "version": "1.0.0",
+  "description": "Simple SOAP API with Node.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "soap": "^0.42.0"
+  }
+}
