@@ -1,20 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions name="MyService"
-             targetNamespace="http://www.example.com/MyService/"
+<definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
              xmlns:tns="http://www.example.com/MyService/"
-             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             name="MyService"
+             targetNamespace="http://www.example.com/MyService/">
+
+  <types>
+    <xsd:schema targetNamespace="http://www.example.com/MyService/">
+      <xsd:element name="MyFunction">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="param1" type="xsd:string"/>
+            <xsd:element name="param2" type="xsd:string"/>
+            <xsd:element name="param3" type="xsd:string"/>
+            <xsd:element name="param4" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="MyFunctionResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="result" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
 
   <message name="MyFunctionRequest">
-    <part name="param1" type="xsd:string"/>
-    <part name="param2" type="xsd:string"/>
-    <part name="param3" type="xsd:string"/>
-    <part name="param4" type="xsd:string"/>
+    <part name="parameters" element="tns:MyFunction"/>
   </message>
-
   <message name="MyFunctionResponse">
-    <part name="result" type="xsd:string"/>
+    <part name="parameters" element="tns:MyFunctionResponse"/>
   </message>
 
   <portType name="MyServicePortType">
@@ -25,21 +43,21 @@
   </portType>
 
   <binding name="MyServiceBinding" type="tns:MyServicePortType">
-    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <operation name="MyFunction">
-      <soap:operation soapAction="http://www.example.com/MyService/MyFunction"/>
+      <soap:operation soapAction="http://www.example.com/MyService/MyFunction" />
       <input>
-        <soap:body use="encoded" namespace="http://www.example.com/MyService/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <soap:body use="literal"/>
       </input>
       <output>
-        <soap:body use="encoded" namespace="http://www.example.com/MyService/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <soap:body use="literal"/>
       </output>
     </operation>
   </binding>
 
   <service name="MyService">
     <port name="MyServicePort" binding="tns:MyServiceBinding">
-      <soap:address location="https://your-app-name.onrender.com/wsdl"/>
+      <soap:address location="https://asgarisms.onrender.com/wsdl"/>
     </port>
   </service>
 </definitions>
